@@ -2,7 +2,9 @@
 A .NET HttpClient wrapper for interacting with the Duo Security Auth REST API.
 
 # Installation
-No NuGet yet.
+```
+NuGet PM> Install-Package DuoSecurity.Auth.Http
+```
 
 # Usage
 
