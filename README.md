@@ -37,4 +37,4 @@ var client = new DuoAuthClient(config);
 
 **{UserKey}** can be substituted for *UserId* or *Username.*
 
-**{Factor}** can be substituted for one of the follow: *Auto*, *Push*, *Passcode* , *Phone*, or *SMS.*
+**{Factor}** can be substituted for one of the following: *Auto*, *Push*, *Passcode* , *Phone*, or *SMS.*
