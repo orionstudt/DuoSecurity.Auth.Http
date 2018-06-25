@@ -90,19 +90,19 @@ namespace DuoSecurity.Auth.Http.Core
 
         public HttpRequestMessage EnrollCheckRequest(string userId, string activationCode)
         {
-            var parameters = new List<KeyValuePair<string, string>>
-            {
+            return buildMessage(HttpMethod.Post, "enroll_status", new KeyValuePair<string, string>[] {
                 new KeyValuePair<string, string>("user_id", userId),
                 new KeyValuePair<string, string>("activation_code", activationCode)
-            };
-            return buildMessage(HttpMethod.Post, "enroll_status", parameters.ToArray());
+            });
         }
 
         public HttpRequestMessage PreAuthRequest(string userId, string username, string ipaddr, string trustedDeviceToken)
         {
             var parameters = new List<KeyValuePair<string, string>>();
+            // User Parameter
             if (!string.IsNullOrWhiteSpace(userId)) parameters.Add(new KeyValuePair<string, string>("user_id", userId));
             else if (!string.IsNullOrWhiteSpace(username)) parameters.Add(new KeyValuePair<string, string>("username", username));
+            // Optional Parameters
             if (!string.IsNullOrWhiteSpace(ipaddr)) parameters.Add(new KeyValuePair<string, string>("ipaddr", ipaddr));           
             if (!string.IsNullOrWhiteSpace(trustedDeviceToken)) parameters.Add(new KeyValuePair<string, string>("trusted_device_token", trustedDeviceToken));
             return buildMessage(HttpMethod.Post, "preauth", parameters.ToArray());
@@ -114,22 +114,23 @@ namespace DuoSecurity.Auth.Http.Core
             {
                 new KeyValuePair<string, string>("factor", factor)
             };
+            // User Parameter
             if (!string.IsNullOrWhiteSpace(userId)) parameters.Add(new KeyValuePair<string, string>("user_id", userId));
             else if (!string.IsNullOrWhiteSpace(username)) parameters.Add(new KeyValuePair<string, string>("username", username));
-            if (!string.IsNullOrWhiteSpace(ipaddr)) parameters.Add(new KeyValuePair<string, string>("ipaddr", ipaddr));
-            if (!string.IsNullOrWhiteSpace(async)) parameters.Add(new KeyValuePair<string, string>("async", async));
+            // Factor Parameter
             if (!string.IsNullOrWhiteSpace(device)) parameters.Add(new KeyValuePair<string, string>("device", device));
             else if (!string.IsNullOrWhiteSpace(passcode)) parameters.Add(new KeyValuePair<string, string>("passcode", passcode));
+            // Optional Parameters
+            if (!string.IsNullOrWhiteSpace(ipaddr)) parameters.Add(new KeyValuePair<string, string>("ipaddr", ipaddr));
+            if (!string.IsNullOrWhiteSpace(async)) parameters.Add(new KeyValuePair<string, string>("async", async));            
             return buildMessage(HttpMethod.Post, "auth", parameters.ToArray());
         }
 
         public HttpRequestMessage AuthStatusRequest(string transactionId)
         {
-            var parameters = new List<KeyValuePair<string, string>>
-            {
+            return buildMessage(HttpMethod.Get, "auth_status", new KeyValuePair<string, string>[] {
                 new KeyValuePair<string, string>("txid", transactionId)
-            };
-            return buildMessage(HttpMethod.Get, "auth_status", parameters.ToArray());
+            });
         }
 
         /* The following methods for building the HMAC Signature were taken from:
