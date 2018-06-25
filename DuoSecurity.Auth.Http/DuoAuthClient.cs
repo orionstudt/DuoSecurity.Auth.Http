@@ -36,7 +36,8 @@ namespace DuoSecurity.Auth.Http
         /// </summary>
         public async Task<DuoResponse<PingResult>> PingAsync()
         {
-            var response = await client.SendAsync(builder.PingRequest());
+            var request = builder.PingRequest();
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<PingResultModel, PingResult>(response);
         }
 
@@ -45,7 +46,8 @@ namespace DuoSecurity.Auth.Http
         /// </summary>
         public async Task<DuoResponse<PingResult>> CheckAsync()
         {
-            var response = await client.SendAsync(builder.CheckRequest());
+            var request = builder.CheckRequest();
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<PingResultModel, PingResult>(response);
         }
 
@@ -54,7 +56,8 @@ namespace DuoSecurity.Auth.Http
         /// </summary>
         public async Task<DuoResponse<LogoResult>> LogoAsync()
         {
-            var response = await client.SendAsync(builder.LogoRequest());
+            var request = builder.LogoRequest();
+            var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return await DuoResponse.ErrorAsync<LogoResult>(response);
             var content = await response.Content.ReadAsByteArrayAsync();
             return new DuoResponse<LogoResult>
@@ -72,7 +75,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="valid_secs">Seconds for which the activation code will remain valid. Default: 86400 (one day).</param>
         public async Task<DuoResponse<EnrollResult>> EnrollAsync(string username = null, int? valid_secs = null)
         {
-            var response = await client.SendAsync(builder.EnrollRequest(username, valid_secs));
+            var request = builder.EnrollRequest(username, valid_secs);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<EnrollResultModel, EnrollResult>(response);
         }
 
@@ -83,7 +87,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="activation_code">Activation code, as returned from /enroll.</param>
         public async Task<DuoResponse<EnrollStatusResult>> EnrollStatusAsync(string user_id, string activation_code)
         {
-            var response = await client.SendAsync(builder.EnrollCheckRequest(user_id, activation_code));
+            var request = builder.EnrollCheckRequest(user_id, activation_code);
+            var response = await client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode) return DuoResponse.Error<EnrollStatusResult>(response, content);
             var model = JsonConvert.DeserializeObject<BaseModel<string>>(content);
@@ -104,7 +109,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="trusted_device_token">If the trusted_device_token is present and the Remembered Devices option is enabled in the Duo Admin Panel, return an "allow" response for the period of time a device may be remembered as set by the Duo administrator.</param>
         public async Task<DuoResponse<PreAuthResult>> PreAuthByUserIdAsync(string user_id, string ipaddr = null, string trusted_device_token = null)
         {
-            var response = await client.SendAsync(builder.PreAuthRequest(user_id, null, ipaddr, trusted_device_token));
+            var request = builder.PreAuthRequest(user_id, null, ipaddr, trusted_device_token);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<PreAuthResultModel, PreAuthResult>(response);
         }
 
@@ -116,7 +122,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="trusted_device_token">If the trusted_device_token is present and the Remembered Devices option is enabled in the Duo Admin Panel, return an "allow" response for the period of time a device may be remembered as set by the Duo administrator.</param>
         public async Task<DuoResponse<PreAuthResult>> PreAuthByUsernameAsync(string username, string ipaddr = null, string trusted_device_token = null)
         {
-            var response = await client.SendAsync(builder.PreAuthRequest(null, username, ipaddr, trusted_device_token));
+            var request = builder.PreAuthRequest(null, username, ipaddr, trusted_device_token);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<PreAuthResultModel, PreAuthResult>(response);
         }
 
@@ -127,7 +134,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthAutoByUserIdAsync(string user_id, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "auto", ipaddr, null, "auto", null));
+            var request = builder.AuthRequest(user_id, null, "auto", ipaddr, null, "auto", null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -138,7 +146,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthAutoByUsernameAsync(string username, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "auto", ipaddr, null, "auto", null));
+            var request = builder.AuthRequest(null, username, "auto", ipaddr, null, "auto", null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -150,7 +159,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPushByUserIdAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "push", ipaddr, null, device, null));
+            var request = builder.AuthRequest(user_id, null, "push", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -162,7 +172,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPushByUsernameAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "push", ipaddr, null, device, null));
+            var request = builder.AuthRequest(null, username, "push", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -174,7 +185,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPasscodeByUserIdAsync(string user_id, string passcode, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "passcode", ipaddr, null, null, passcode));
+            var request = builder.AuthRequest(user_id, null, "passcode", ipaddr, null, null, passcode);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -186,7 +198,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPasscodeByUsernameAsync(string username, string passcode, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "passcode", ipaddr, null, null, passcode));
+            var request = builder.AuthRequest(null, username, "passcode", ipaddr, null, null, passcode);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -198,7 +211,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthSmsByUserIdAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "sms", ipaddr, null, device, null));
+            var request = builder.AuthRequest(user_id, null, "sms", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -210,7 +224,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthSmsByUsernameAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "sms", ipaddr, null, device, null));
+            var request = builder.AuthRequest(null, username, "sms", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -222,7 +237,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPhoneByUserIdAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "phone", ipaddr, null, device, null));
+            var request = builder.AuthRequest(user_id, null, "phone", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -234,7 +250,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthResult>> AuthPhoneByUsernameAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "phone", ipaddr, null, device, null));
+            var request = builder.AuthRequest(null, username, "phone", ipaddr, null, device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthResultModel, AuthResult>(response);
         }
 
@@ -245,7 +262,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthAutoByUserIdForPollingAsync(string user_id, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "auto", ipaddr, "1", "auto", null));
+            var request = builder.AuthRequest(user_id, null, "auto", ipaddr, "1", "auto", null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -256,7 +274,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthAutoByUsernameForPollingAsync(string username, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "auto", ipaddr, "1", "auto", null));
+            var request = builder.AuthRequest(null, username, "auto", ipaddr, "1", "auto", null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -268,7 +287,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPushByUserIdForPollingAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "push", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(user_id, null, "push", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -280,7 +300,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPushByUsernameForPollingAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "push", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(null, username, "push", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -292,7 +313,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPasscodeByUserIdForPollingAsync(string user_id, string passcode, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "passcode", ipaddr, "1", null, passcode));
+            var request = builder.AuthRequest(user_id, null, "passcode", ipaddr, "1", null, passcode);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -304,7 +326,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPasscodeByUsernameForPollingAsync(string username, string passcode, string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "passcode", ipaddr, "1", null, passcode));
+            var request = builder.AuthRequest(null, username, "passcode", ipaddr, "1", null, passcode);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -316,7 +339,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthSmsByUserIdForPollingAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "sms", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(user_id, null, "sms", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -328,7 +352,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthSmsByUsernameForPollingAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "sms", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(null, username, "sms", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -340,7 +365,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPhoneByUserIdForPollingAsync(string user_id, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(user_id, null, "phone", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(user_id, null, "phone", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -352,7 +378,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="ipaddr">The IP address of the user to be authenticated, in dotted quad format. This will cause an "allow" response to be sent if appropriate for requests from a trusted network.</param>
         public async Task<DuoResponse<AuthAsyncResult>> AuthPhoneByUsernameForPollingAsync(string username, string device = "auto", string ipaddr = null)
         {
-            var response = await client.SendAsync(builder.AuthRequest(null, username, "phone", ipaddr, "1", device, null));
+            var request = builder.AuthRequest(null, username, "phone", ipaddr, "1", device, null);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthAsyncResultModel, AuthAsyncResult>(response);
         }
 
@@ -362,7 +389,8 @@ namespace DuoSecurity.Auth.Http
         /// <param name="txid">The transaction ID of the authentication attempt, as returned by the /auth endpoint.</param>
         public async Task<DuoResponse<AuthStatusResult>> AuthStatusAsync(string txid)
         {
-            var response = await client.SendAsync(builder.AuthStatusRequest(txid));
+            var request = builder.AuthStatusRequest(txid);
+            var response = await client.SendAsync(request);
             return await DuoResponse.ParseAsync<AuthStatusResultModel, AuthStatusResult>(response);
         }
 
