@@ -64,7 +64,7 @@ namespace DuoSecurity.Auth.Http
             {
                 IsSuccessful = true,
                 OriginalResponse = response,
-                Response = new LogoResult(content)
+                Result = new LogoResult(content)
             };
         }
 
@@ -97,7 +97,7 @@ namespace DuoSecurity.Auth.Http
                 IsSuccessful = true,
                 OriginalResponse = response,
                 OriginalJson = content,
-                Response = new EnrollStatusResult(model.Response)
+                Result = new EnrollStatusResult(model.Response)
             };
         }
 

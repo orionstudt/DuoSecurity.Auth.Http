@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
-    internal class AuthStatusResultModel : IModel<AuthStatusResult>
+    internal class AuthStatusResultModel : IJsonModel<AuthStatusResult>
     {
         public string Result { get; set; }
 

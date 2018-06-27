@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.Abstraction
 {
-    internal interface IModel<T>
+    internal interface IJsonModel<T>
     {
         T ToResult();
     }

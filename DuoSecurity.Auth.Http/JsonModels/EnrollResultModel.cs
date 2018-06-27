@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
-    internal class EnrollResultModel : IModel<EnrollResult>
+    internal class EnrollResultModel : IJsonModel<EnrollResult>
     {
         public string Activation_Barcode { get; set; }
 

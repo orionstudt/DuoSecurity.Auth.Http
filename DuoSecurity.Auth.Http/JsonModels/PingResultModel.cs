@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
-    internal class PingResultModel : IModel<PingResult>
+    internal class PingResultModel : IJsonModel<PingResult>
     {
         public long Time { get; set; }
 

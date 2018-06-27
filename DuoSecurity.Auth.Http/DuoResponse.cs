@@ -1,4 +1,5 @@
 ﻿using DuoSecurity.Auth.Http.Abstraction;
+using DuoSecurity.Auth.Http.Core;
 using DuoSecurity.Auth.Http.JsonModels;
 using DuoSecurity.Auth.Http.Results;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DuoSecurity.Auth.Http.Core
+namespace DuoSecurity.Auth.Http
 {
     public class DuoResponse<T>
     {
@@ -21,14 +22,14 @@ namespace DuoSecurity.Auth.Http.Core
 
         public string OriginalJson { get; internal set; }
 
-        public T Response { get; internal set; }
+        public T Result { get; internal set; }
 
         internal DuoResponse() { }
     }
 
     internal static class DuoResponse
     {
-        public static async Task<DuoResponse<Ty>> ParseAsync<Tx, Ty>(HttpResponseMessage response) where Tx : class, IModel<Ty>
+        public static async Task<DuoResponse<Ty>> ParseAsync<Tx, Ty>(HttpResponseMessage response) where Tx : class, IJsonModel<Ty>
         {
             var content = await response.Content.ReadAsStringAsync();
 
@@ -41,7 +42,7 @@ namespace DuoSecurity.Auth.Http.Core
                     Error = null,
                     OriginalResponse = response,
                     OriginalJson = content,
-                    Response = model.Response.ToResult()
+                    Result = model.Response.ToResult()
                 };
             }
 
@@ -63,7 +64,7 @@ namespace DuoSecurity.Auth.Http.Core
                 Error = new DuoError(error),
                 OriginalResponse = response,
                 OriginalJson = content,
-                Response = default(T)
+                Result = default(T)
             };
         }
     }
