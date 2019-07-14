@@ -31,7 +31,7 @@ namespace DuoSecurity.Auth.Http
     {
         public static async Task<DuoResponse<Ty>> ParseAsync<Tx, Ty>(HttpResponseMessage response) where Tx : class, IJsonModel<Ty>
         {
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -51,7 +51,7 @@ namespace DuoSecurity.Auth.Http
 
         public static async Task<DuoResponse<T>> ErrorAsync<T>(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return Error<T>(response, content);
         }
 
