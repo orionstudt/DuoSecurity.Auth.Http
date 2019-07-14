@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0-beta</Version>
+    <Version>1.0.1-beta</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Joshua Studt</Authors>
     <Description>A .NET HttpClient wrapper for interacting with the Duo Security Auth REST API.</Description>
     <PackageProjectUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http</PackageProjectUrl>
     <RepositoryUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http</RepositoryUrl>
     <PackageTags>Duo DuoSecurity REST API Auth TwoFactor 2FA HttpClient</PackageTags>
-    <PackageReleaseNotes>Initial Publish - Pre-release.</PackageReleaseNotes>
-    <Copyright>Joshua Studt 2018</Copyright>
+    <PackageReleaseNotes>Add `configureawait` and cancellation token support.</PackageReleaseNotes>
+    <Copyright>Joshua Studt 2019</Copyright>
     <PackageLicenseUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
