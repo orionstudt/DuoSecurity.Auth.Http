@@ -27,9 +27,9 @@ namespace DuoSecurity.Auth.Http
             if (client == null)
             {
                 ownsClient = true;
-                client = new HttpClient();
+                this.client = new HttpClient();
             }
-            this.client = client;
+            else this.client = client;
         }
 
         /// <summary>

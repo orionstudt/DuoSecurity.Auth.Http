@@ -40,7 +40,8 @@ namespace DuoSecurity.Auth.Http.Core
             // Init Message
             var mUpper = method.Method.ToUpper();
             HttpRequestMessage message;
-            if ((mUpper == "GET" || mUpper == "DELETE") && !string.IsNullOrWhiteSpace(urlParams)) message = new HttpRequestMessage(method, $"https://{host}/{prefix}/{endpoint}?{urlParams}");
+            if ((mUpper == "GET" || mUpper == "DELETE") && !string.IsNullOrWhiteSpace(urlParams))
+                message = new HttpRequestMessage(method, $"https://{host}/{prefix}/{endpoint}?{urlParams}");
             else message = new HttpRequestMessage(method, $"https://{host}/{prefix}/{endpoint}");
 
             // Headers
