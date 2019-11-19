@@ -8,7 +8,19 @@ namespace DuoSecurity.Auth.Http.JsonModels
 {
     internal class DeviceModel
     {
-        public IEnumerable<string> Capabilities { get; set; }
+        private IEnumerable<string> _capabilities;
+
+        public IEnumerable<string> Capabilities
+        {
+            get
+            {
+                if (_capabilities == null)
+                    _capabilities = new List<string>();
+
+                return _capabilities;
+            }
+            set { _capabilities = value; }
+        }
 
         public string Device { get; set; }
 
