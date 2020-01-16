@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>1.0.1-beta</Version>
@@ -11,7 +10,7 @@
     <PackageTags>Duo DuoSecurity REST API Auth TwoFactor 2FA HttpClient</PackageTags>
     <PackageReleaseNotes>Add `configureawait` and cancellation token support.</PackageReleaseNotes>
     <Copyright>Joshua Studt 2019</Copyright>
-    <PackageLicenseUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -23,7 +22,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <None Include="..\$(PackageLicenseFile)" Pack="true" PackagePath=""/>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
 </Project>
