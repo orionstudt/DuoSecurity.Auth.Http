@@ -1,9 +1,4 @@
 ﻿using DuoSecurity.Auth.Http.JsonModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.Results
 {
@@ -31,30 +26,10 @@ namespace DuoSecurity.Auth.Http.Results
 
         internal AuthResult(AuthResultModel model)
         {
-            switch (model.Result.ToLower())
-            {
-                case "allow":
-                    Result = AuthState.Allow;
-                    break;
-                default:
-                    Result = AuthState.Deny;
-                    break;
-            }
+            Result = model.Result?.ToLower() == "allow" ? AuthState.Allow : AuthState.Deny;
             Status = model.Status;
             StatusMessage = model.Status_Msg;
             TrustedDeviceToken = model.Trusted_Device_Token;
         }
-    }
-
-    public enum AuthState
-    {
-        /// <summary>
-        /// Your application should grant access to the user.
-        /// </summary>
-        Allow,
-        /// <summary>
-        /// Your application should not grant access to the user.
-        /// </summary>
-        Deny
     }
 }

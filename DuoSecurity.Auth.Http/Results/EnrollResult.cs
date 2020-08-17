@@ -1,9 +1,5 @@
 ﻿using DuoSecurity.Auth.Http.JsonModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.Results
 {
@@ -38,8 +34,7 @@ namespace DuoSecurity.Auth.Http.Results
         {
             ActivationBarCode = model.Activation_Barcode;
             ActivationCode = model.Activation_Code;
-            ExpirationUtc = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            ExpirationUtc = ExpirationUtc.AddSeconds(model.Expiration);
+            ExpirationUtc = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(model.Expiration);
             UserId = model.User_Id;
             UserName = model.Username;
         }

@@ -1,9 +1,6 @@
 ﻿using DuoSecurity.Auth.Http.JsonModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.Results
 {
@@ -31,7 +28,7 @@ namespace DuoSecurity.Auth.Http.Results
 
         internal PreAuthResult(PreAuthResultModel model)
         {
-            switch (model.Result.ToLower())
+            switch (model.Result?.ToLower())
             {
                 case "auth":
                     Result = PreAuthState.Auth;
@@ -46,31 +43,10 @@ namespace DuoSecurity.Auth.Http.Results
                     Result = PreAuthState.Deny;
                     break;
             }
+
             StatusMessage = model.Status_Msg;
-            var devices = new List<Device>();
-            if (model.Devices != null && model.Devices.Any()) foreach (var d in model.Devices) devices.Add(new Device(d));
-            Devices = devices;
+            Devices = model.Devices?.Select(d => new Device(d)).ToList() ?? Enumerable.Empty<Device>();
             EnrollmentPortalUrl = model.Enroll_Portal_Url;
         }
-    }
-
-    public enum PreAuthState
-    {
-        /// <summary>
-        /// The user is known and permitted to authenticate. Your client application should use the /auth endpoint to perform authentication.
-        /// </summary>
-        Auth,
-        /// <summary>
-        /// The user is configured to bypass secondary authentication. Your client application should immediately grant access.
-        /// </summary>
-        Allow,
-        /// <summary>
-        /// The user is not permitted to authenticate at this time. Your client application should immediately deny access.
-        /// </summary>
-        Deny,
-        /// <summary>
-        /// The user is not known to Duo and needs to enroll. Your application should deny access.
-        /// </summary>
-        Enroll
     }
 }

@@ -1,9 +1,6 @@
 ﻿using DuoSecurity.Auth.Http.JsonModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.Results
 {
@@ -82,14 +79,7 @@ namespace DuoSecurity.Auth.Http.Results
             Name = model.Name;
             SMS_NextCode = model.Sms_Nextcode;
             PhoneNumber = model.Number;
-            if (model.Type.ToLower() == "phone") Type = DeviceType.Phone;
-            else Type = DeviceType.Token;
+            Type = model.Type?.ToLower() == "phone" ? DeviceType.Phone : DeviceType.Token;
         }
-    }
-
-    public enum DeviceType
-    {
-        Phone,
-        Token
     }
 }

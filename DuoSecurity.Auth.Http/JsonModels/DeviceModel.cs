@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
     internal class DeviceModel
     {
-        public IEnumerable<string> Capabilities { get; set; }
+        private IEnumerable<string> _capabilities = Enumerable.Empty<string>();
+
+        public IEnumerable<string> Capabilities
+        {
+            get => _capabilities;
+            set => _capabilities = value ?? Enumerable.Empty<string>();
+        }
 
         public string Device { get; set; }
 

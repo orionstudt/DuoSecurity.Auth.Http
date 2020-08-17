@@ -1,42 +1,23 @@
 ﻿using DuoSecurity.Auth.Http.Abstraction;
 using DuoSecurity.Auth.Http.Core;
 using DuoSecurity.Auth.Http.JsonModels;
-using DuoSecurity.Auth.Http.Results;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DuoSecurity.Auth.Http
 {
-    public class DuoResponse<T>
-    {
-        public bool IsSuccessful { get; internal set; }
-
-        public DuoError Error { get; internal set; }
-
-        public HttpResponseMessage OriginalResponse { get; internal set; }
-
-        public string OriginalJson { get; internal set; }
-
-        public T Result { get; internal set; }
-
-        internal DuoResponse() { }
-    }
-
     internal static class DuoResponse
     {
-        public static async Task<DuoResponse<Ty>> ParseAsync<Tx, Ty>(HttpResponseMessage response) where Tx : class, IJsonModel<Ty>
+        public static async Task<DuoResponse<TResult>> ParseAsync<TJsonModel, TResult>(HttpResponseMessage response)
+            where TJsonModel : class, IJsonModel<TResult>
         {
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
-                var model = JsonConvert.DeserializeObject<BaseModel<Tx>>(content);
-                return new DuoResponse<Ty>
+                var model = JsonConvert.DeserializeObject<BaseModel<TJsonModel>>(content);
+                return new DuoResponse<TResult>
                 {
                     IsSuccessful = true,
                     Error = null,
@@ -46,25 +27,25 @@ namespace DuoSecurity.Auth.Http
                 };
             }
 
-            return Error<Ty>(response, content);
+            return Error<TResult>(response, content);
         }
 
-        public static async Task<DuoResponse<T>> ErrorAsync<T>(HttpResponseMessage response)
+        public static async Task<DuoResponse<TResult>> ErrorAsync<TResult>(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return Error<T>(response, content);
+            return Error<TResult>(response, content);
         }
 
-        public static DuoResponse<T> Error<T>(HttpResponseMessage response, string content)
+        public static DuoResponse<TResult> Error<TResult>(HttpResponseMessage response, string content)
         {
             var error = JsonConvert.DeserializeObject<ErrorModel>(content);
-            return new DuoResponse<T>
+            return new DuoResponse<TResult>
             {
                 IsSuccessful = false,
                 Error = new DuoError(error),
                 OriginalResponse = response,
                 OriginalJson = content,
-                Result = default(T)
+                Result = default(TResult),
             };
         }
     }
