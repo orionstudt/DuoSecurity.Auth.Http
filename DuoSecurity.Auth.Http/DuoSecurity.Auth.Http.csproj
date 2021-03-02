@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Joshua Studt</Authors>
     <Description>A .NET HttpClient wrapper for interacting with the Duo Security Auth REST API.</Description>
     <PackageProjectUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http</PackageProjectUrl>
     <RepositoryUrl>https://github.com/orionstudt/DuoSecurity.Auth.Http</RepositoryUrl>
     <PackageTags>Duo DuoSecurity REST API Auth TwoFactor 2FA HttpClient</PackageTags>
-    <PackageReleaseNotes>Resolve null ref bug on internal collection serialization.</PackageReleaseNotes>
+    <PackageReleaseNotes>Ensure request timestamp takes into account time zone offset minutes.</PackageReleaseNotes>
     <Copyright>Joshua Studt 2020</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\$(PackageLicenseFile)" Pack="true" PackagePath=""/>
+    <None Include="..\$(PackageLicenseFile)" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
