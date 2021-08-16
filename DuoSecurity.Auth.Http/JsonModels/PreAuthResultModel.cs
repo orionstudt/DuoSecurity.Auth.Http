@@ -7,7 +7,7 @@ namespace DuoSecurity.Auth.Http.JsonModels
 {
     internal class PreAuthResultModel : IJsonModel<PreAuthResult>
     {
-        private IEnumerable<DeviceModel> _devices = Enumerable.Empty<DeviceModel>();
+        private IEnumerable<DeviceModel> _devices;
 
         public string Result { get; set; }
 
