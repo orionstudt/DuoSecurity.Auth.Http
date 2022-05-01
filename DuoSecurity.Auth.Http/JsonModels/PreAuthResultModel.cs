@@ -1,5 +1,4 @@
-﻿using DuoSecurity.Auth.Http.Abstraction;
-using DuoSecurity.Auth.Http.Results;
+﻿using DuoSecurity.Auth.Http.Results;
 using System.Collections.Generic;
 
 namespace DuoSecurity.Auth.Http.JsonModels
@@ -21,8 +20,6 @@ namespace DuoSecurity.Auth.Http.JsonModels
         public string Enroll_Portal_Url { get; set; }
 
         public PreAuthResult ToResult()
-        {
-            return new PreAuthResult(this);
-        }
+            => new(this);
     }
 }

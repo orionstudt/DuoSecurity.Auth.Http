@@ -20,10 +20,10 @@ namespace DuoSecurity.Auth.Http
 
         public DuoAuthClient(DuoAuthConfig config, HttpClient client = null)
         {
-            builder = new DuoRequestBuilder(config);
+            this.builder = new DuoRequestBuilder(config);
             if (client == null)
             {
-                ownsClient = true;
+                this.ownsClient = true;
                 this.client = new HttpClient();
             }
             else this.client = client;

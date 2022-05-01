@@ -21,7 +21,7 @@ namespace DuoSecurity.Auth.Http.Core
             secretKey = config.SecretKey;
         }
 
-        private HttpRequestMessage buildMessage(HttpMethod method, string endpoint, params KeyValuePair<string, string>[] parameters)
+        private HttpRequestMessage BuildMessage(HttpMethod method, string endpoint, params KeyValuePair<string, string>[] parameters)
         {
             // Url Encoded Parameters
             var urlParams = string.Empty;
@@ -72,21 +72,21 @@ namespace DuoSecurity.Auth.Http.Core
         }
 
         public HttpRequestMessage CheckRequest()
-            => buildMessage(HttpMethod.Get, "check");
+            => BuildMessage(HttpMethod.Get, "check");
 
         public HttpRequestMessage LogoRequest()
-            => buildMessage(HttpMethod.Get, "logo");
+            => BuildMessage(HttpMethod.Get, "logo");
 
         public HttpRequestMessage EnrollRequest(string username, int? validSecs)
         {
             var parameters = new List<KeyValuePair<string, string>>();
             if (!string.IsNullOrWhiteSpace(username)) parameters.Add(new KeyValuePair<string, string>("username", username));
             if (validSecs.HasValue) parameters.Add(new KeyValuePair<string, string>("valid_secs", validSecs.Value.ToString()));
-            return buildMessage(HttpMethod.Post, "enroll", parameters.ToArray());
+            return BuildMessage(HttpMethod.Post, "enroll", parameters.ToArray());
         }
 
         public HttpRequestMessage EnrollCheckRequest(string userId, string activationCode)
-            => buildMessage(
+            => BuildMessage(
                 HttpMethod.Post,
                 "enroll_status",
                 new KeyValuePair<string, string>[]
@@ -112,7 +112,7 @@ namespace DuoSecurity.Auth.Http.Core
             if (!string.IsNullOrWhiteSpace(trustedDeviceToken))
                 parameters.Add(new KeyValuePair<string, string>("trusted_device_token", trustedDeviceToken));
 
-            return buildMessage(HttpMethod.Post, "preauth", parameters.ToArray());
+            return BuildMessage(HttpMethod.Post, "preauth", parameters.ToArray());
         }
 
         public HttpRequestMessage AuthRequest(string userId, string username, string factor, string ipaddr, string async, string device, string passcode)
@@ -141,11 +141,11 @@ namespace DuoSecurity.Auth.Http.Core
             if (!string.IsNullOrWhiteSpace(async))
                 parameters.Add(new KeyValuePair<string, string>("async", async));   
             
-            return buildMessage(HttpMethod.Post, "auth", parameters.ToArray());
+            return BuildMessage(HttpMethod.Post, "auth", parameters.ToArray());
         }
 
         public HttpRequestMessage AuthStatusRequest(string transactionId)
-            => buildMessage(
+            => BuildMessage(
                 HttpMethod.Get,
                 "auth_status",
                 new KeyValuePair<string, string>[]

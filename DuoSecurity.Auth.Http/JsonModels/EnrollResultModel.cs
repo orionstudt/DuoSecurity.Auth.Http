@@ -1,5 +1,4 @@
-﻿using DuoSecurity.Auth.Http.Abstraction;
-using DuoSecurity.Auth.Http.Results;
+﻿using DuoSecurity.Auth.Http.Results;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
@@ -16,8 +15,6 @@ namespace DuoSecurity.Auth.Http.JsonModels
         public string Username { get; set; }
 
         public EnrollResult ToResult()
-        {
-            return new EnrollResult(this);
-        }
+            => new(this);
     }
 }

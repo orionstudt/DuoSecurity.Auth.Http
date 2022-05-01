@@ -1,5 +1,4 @@
-﻿using DuoSecurity.Auth.Http.Abstraction;
-using DuoSecurity.Auth.Http.Results;
+﻿using DuoSecurity.Auth.Http.Results;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
@@ -14,8 +13,6 @@ namespace DuoSecurity.Auth.Http.JsonModels
         public string Trusted_Device_Token { get; set; }
 
         public AuthStatusResult ToResult()
-        {
-            return new AuthStatusResult(this);
-        }
+            => new(this);
     }
 }

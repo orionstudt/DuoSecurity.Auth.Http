@@ -1,5 +1,4 @@
-﻿using DuoSecurity.Auth.Http.Abstraction;
-using DuoSecurity.Auth.Http.Core;
+﻿using DuoSecurity.Auth.Http.Core;
 using DuoSecurity.Auth.Http.JsonModels;
 using Newtonsoft.Json;
 using System.Net.Http;

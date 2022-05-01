@@ -1,4 +1,4 @@
-﻿namespace DuoSecurity.Auth.Http.Abstraction
+﻿namespace DuoSecurity.Auth.Http.JsonModels
 {
     internal interface IJsonModel<T>
     {

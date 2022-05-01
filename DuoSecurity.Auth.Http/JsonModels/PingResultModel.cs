@@ -1,5 +1,4 @@
-﻿using DuoSecurity.Auth.Http.Abstraction;
-using DuoSecurity.Auth.Http.Results;
+﻿using DuoSecurity.Auth.Http.Results;
 
 namespace DuoSecurity.Auth.Http.JsonModels
 {
@@ -8,8 +7,6 @@ namespace DuoSecurity.Auth.Http.JsonModels
         public long Time { get; set; }
 
         public PingResult ToResult()
-        {
-            return new PingResult(this);
-        }
+            => new(this);
     }
 }
