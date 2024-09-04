@@ -4,6 +4,12 @@ obj/
 *.nupkg
 *.csproj.user
 
+# Rider
+.idea/*
+
+# Local Settings
+*.sln.DotSettings.user
+
 # Ignore NuGet Packages
 *.nupkg
 

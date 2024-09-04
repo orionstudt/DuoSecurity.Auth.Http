@@ -7,7 +7,7 @@
         public string IntegrationKey { get; set; }
 
         public string SecretKey { get; set; }
-
+        
         public DuoAuthConfig(string host, string integrationKey, string secretKey)
         {
             Host = host;
