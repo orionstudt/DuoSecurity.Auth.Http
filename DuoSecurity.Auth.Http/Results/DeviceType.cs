@@ -1,8 +1,7 @@
-﻿namespace DuoSecurity.Auth.Http.Results
+﻿namespace DuoSecurity.Auth.Http.Results;
+
+public enum DeviceType
 {
-    public enum DeviceType
-    {
-        Phone,
-        Token
-    }
+    Phone,
+    Token
 }

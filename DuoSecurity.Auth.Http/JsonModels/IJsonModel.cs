@@ -1,7 +1,6 @@
-﻿namespace DuoSecurity.Auth.Http.JsonModels
+﻿namespace DuoSecurity.Auth.Http.JsonModels;
+
+internal interface IJsonModel<T>
 {
-    internal interface IJsonModel<T>
-    {
-        T ToResult();
-    }
+    T ToResult();
 }

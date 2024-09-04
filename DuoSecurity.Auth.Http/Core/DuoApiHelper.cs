@@ -6,44 +6,43 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace DuoSecurity.Auth.Http.Core
+namespace DuoSecurity.Auth.Http.Core;
+/* The following methods for building the HMAC Signature were taken from:
+     *
+     * https://github.com/duosecurity/duo_api_csharp
+     *
+     * License:
+     *  Copyright (c) 2013, Duo Security, Inc.
+        All rights reserved.
+
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions
+        are met:
+
+        1. Redistributions of source code must retain the above copyright
+           notice, this list of conditions and the following disclaimer.
+        2. Redistributions in binary form must reproduce the above copyright
+           notice, this list of conditions and the following disclaimer in the
+           documentation and/or other materials provided with the distribution.
+        3. The name of the author may not be used to endorse or promote products
+           derived from this software without specific prior written permission.
+
+        THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+        IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+        OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+        IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+        INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+        NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+        THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        */
+
+internal static class DuoApiHelper
 {
-    /* The following methods for building the HMAC Signature were taken from:
-         * 
-         * https://github.com/duosecurity/duo_api_csharp
-         * 
-         * License:
-         *  Copyright (c) 2013, Duo Security, Inc.
-            All rights reserved.
-
-            Redistribution and use in source and binary forms, with or without
-            modification, are permitted provided that the following conditions
-            are met:
-
-            1. Redistributions of source code must retain the above copyright
-               notice, this list of conditions and the following disclaimer.
-            2. Redistributions in binary form must reproduce the above copyright
-               notice, this list of conditions and the following disclaimer in the
-               documentation and/or other materials provided with the distribution.
-            3. The name of the author may not be used to endorse or promote products
-               derived from this software without specific prior written permission.
-
-            THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-            IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-            OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-            IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-            INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-            NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-            DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-            THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-            (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-            THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-            */
-
-    internal static class DuoApiHelper
+    public static string CanonicalizeParams(IEnumerable<KeyValuePair<string, string>> parameters)
     {
-        public static string CanonicalizeParams(IEnumerable<KeyValuePair<string, string>> parameters)
-        {
             var ret = new List<string>();
             foreach (var pair in parameters)
             {
@@ -69,8 +68,8 @@ namespace DuoSecurity.Auth.Http.Core
             return string.Join("&", ret.ToArray());
         }
 
-        public static string CanonicalizeRequest(string method, string host, string endpoint, string canonParams, string date)
-        {
+    public static string CanonicalizeRequest(string method, string host, string endpoint, string canonParams, string date)
+    {
             var lines = new string[]
             {
                 date,
@@ -83,8 +82,8 @@ namespace DuoSecurity.Auth.Http.Core
             return string.Join("\n", lines);
         }
 
-        public static string HmacSign(string secretKey, string data)
-        {
+    public static string HmacSign(string secretKey, string data)
+    {
             byte[] key_bytes = Encoding.ASCII.GetBytes(secretKey);
             HMACSHA1 hmac = new HMACSHA1(key_bytes);
 
@@ -95,15 +94,15 @@ namespace DuoSecurity.Auth.Http.Core
             return hex.Replace("-", "").ToLower();
         }
 
-        public static string Encode64(string plaintext)
-        {
+    public static string Encode64(string plaintext)
+    {
             byte[] plaintext_bytes = Encoding.ASCII.GetBytes(plaintext);
             string encoded = Convert.ToBase64String(plaintext_bytes);
             return encoded;
         }
 
-        public static string DateToRFC822(DateTime date)
-        {
+    public static string DateToRFC822(DateTime date)
+    {
             // Can't use the "zzzz" format because it adds a ":"
             // between the offset's hours and minutes.
             string date_string = date.ToString(
@@ -137,5 +136,4 @@ namespace DuoSecurity.Auth.Http.Core
             date_string += " " + zone;
             return date_string;
         }
-    }
 }

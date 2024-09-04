@@ -1,14 +1,14 @@
-﻿namespace DuoSecurity.Auth.Http.Results
-{
-    public class EnrollStatusResult
-    {
-        /// <summary>
-        /// Indicates whether a user has completed enrollment.
-        /// </summary>
-        public EnrollStatus Status { get; }
+﻿namespace DuoSecurity.Auth.Http.Results;
 
-        internal EnrollStatusResult(string response)
-        {
+public class EnrollStatusResult
+{
+    /// <summary>
+    /// Indicates whether a user has completed enrollment.
+    /// </summary>
+    public EnrollStatus Status { get; }
+
+    internal EnrollStatusResult(string response)
+    {
             switch (response?.ToLower())
             {
                 case "success":
@@ -22,5 +22,4 @@
                     break;
             }
         }
-    }
 }

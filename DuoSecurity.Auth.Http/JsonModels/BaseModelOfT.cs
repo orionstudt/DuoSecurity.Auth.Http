@@ -1,8 +1,7 @@
-﻿namespace DuoSecurity.Auth.Http.JsonModels
+﻿namespace DuoSecurity.Auth.Http.JsonModels;
+
+internal class BaseModel<T> : BaseModel
+    where T : class
 {
-    internal class BaseModel<T> : BaseModel
-        where T : class
-    {
-        public T Response { get; set; }
-    }
+    public T Response { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace DuoSecurity.Auth.Http.JsonModels
+﻿namespace DuoSecurity.Auth.Http.JsonModels;
+
+internal class BaseModel
 {
-    internal class BaseModel
-    {
-        public string Stat { get; set; }
-    }
+    public string Stat { get; set; }
 }

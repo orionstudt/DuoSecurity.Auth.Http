@@ -1,14 +1,13 @@
 ﻿using DuoSecurity.Auth.Http.JsonModels;
 
-namespace DuoSecurity.Auth.Http.Results
-{
-    public class AuthAsyncResult
-    {
-        public string TransactionId { get; }
+namespace DuoSecurity.Auth.Http.Results;
 
-        internal AuthAsyncResult(AuthAsyncResultModel model)
-        {
+public class AuthAsyncResult
+{
+    public string TransactionId { get; }
+
+    internal AuthAsyncResult(AuthAsyncResultModel model)
+    {
             TransactionId = model.Txid;
         }
-    }
 }
