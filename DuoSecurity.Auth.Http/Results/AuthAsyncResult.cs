@@ -1,13 +1,12 @@
-﻿using DuoSecurity.Auth.Http.JsonModels;
+﻿using System.Text.Json.Serialization;
 
 namespace DuoSecurity.Auth.Http.Results;
 
-public class AuthAsyncResult
+public sealed record AuthAsyncResult
 {
-    public string TransactionId { get; }
-
-    internal AuthAsyncResult(AuthAsyncResultModel model)
-    {
-            TransactionId = model.Txid;
-        }
+    /// <summary>
+    /// A transaction ID to be used to query the authentication status using the auth status endpoint.
+    /// </summary>
+    [JsonPropertyName("txid")]
+    public required string TransactionId { get; init; }
 }

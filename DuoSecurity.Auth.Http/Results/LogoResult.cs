@@ -1,20 +1,22 @@
-﻿namespace DuoSecurity.Auth.Http.Results;
+﻿using System;
+using System.IO;
 
-public class LogoResult
+namespace DuoSecurity.Auth.Http.Results;
+
+public sealed record LogoResult : IDisposable
 {
     /// <summary>
     /// MIME Type of image.
     /// </summary>
-    public string ContentType { get; }
+    public string ContentType { get; } = "image/png";
 
     /// <summary>
-    /// Binary image data.
+    /// Logo data as a stream.
     /// </summary>
-    public byte[] Data { get; }
+    public required Stream Stream { get; init; }
 
-    internal LogoResult(byte[] content)
+    public void Dispose()
     {
-            ContentType = "image/png";
-            Data = content;
-        }
+        Stream?.Dispose();
+    }
 }

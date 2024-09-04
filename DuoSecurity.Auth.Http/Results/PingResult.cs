@@ -1,18 +1,18 @@
-﻿using DuoSecurity.Auth.Http.JsonModels;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace DuoSecurity.Auth.Http.Results;
 
-public class PingResult
+public sealed record PingResult
 {
+    /// <summary>
+    /// Current server time, as a UNIX timestamp.
+    /// </summary>
+    [JsonPropertyName("time")]
+    public required long Time { get; init; }
+    
     /// <summary>
     /// Current server time.
     /// </summary>
-    public DateTime TimeUtc { get; set; }
-
-    internal PingResult(PingResultModel model)
-    {
-            // UNIX Timestamp to UTC time
-            TimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(model.Time);
-        }
+    public DateTime TimeUtc => DateTime.UnixEpoch.AddSeconds(Time);
 }

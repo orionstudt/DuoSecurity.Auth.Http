@@ -1,84 +1,76 @@
-﻿using DuoSecurity.Auth.Http.JsonModels;
+﻿using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace DuoSecurity.Auth.Http.Results;
 
-public class Device
+public sealed record Device
 {
     /// <summary>
     /// The device is valid for automatic factor selection (e.g. phone or push).
     /// </summary>
-    public bool CanAuto { get; }
+    public bool CanAuto => Capabilities.Contains(DeviceCapability.Auto);
 
     /// <summary>
     /// The device is activated for Duo Push.
     /// </summary>
-    public bool CanPush { get; }
+    public bool CanPush => Capabilities.Contains(DeviceCapability.Push);
 
     /// <summary>
     /// The device can receive batches of SMS passcodes.
     /// </summary>
-    public bool CanSMS { get; }
+    public bool CanSms => Capabilities.Contains(DeviceCapability.Sms);
 
     /// <summary>
     /// The device can receive phone calls.
     /// </summary>
-    public bool CanPhone { get; }
+    public bool CanPhone => Capabilities.Contains(DeviceCapability.Phone);
 
     /// <summary>
     /// The device is capable of generating passcodes with the Duo Mobile app.
     /// </summary>
-    public bool CanMobileOTP { get; }
+    public bool CanMobileOtp => Capabilities.Contains(DeviceCapability.MobileOtp);
 
     /// <summary>
     /// List of strings, each a factor that can be used with the device.
     /// </summary>
-    public IEnumerable<string> Capabilities { get; }
+    [JsonPropertyName("capabilities")]
+    public required HashSet<DeviceCapability> Capabilities { get; init; }
 
     /// <summary>
     /// Identifies which of the user's devices this is.
     /// </summary>
-    public string DeviceId { get; }
+    [JsonPropertyName("device")]
+    public required string DeviceId { get; init; }
+    
+    /// <summary>
+    /// "phone" or "token".
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required DeviceType Type { get; init; }
 
     /// <summary>
     /// A short string which can be used to identify the device in a prompt.
     /// </summary>
-    public string DisplayName { get; }
+    [JsonPropertyName("display_name")]
+    public string? DisplayName { get; init; }
 
     /// <summary>
     /// Device's name. Or, if the device has not been named, the empty string ("").
     /// </summary>
-    public string Name { get; }
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
 
     /// <summary>
-    /// Single-character string containing the starting number of the next acceptable passcode previously SMSed to the user, if any.
+    /// Single-character string containing the starting number of the next acceptable passcode
+    /// previously SMSed to the user, if any.
     /// </summary>
-    public string SMS_NextCode { get; }
+    [JsonPropertyName("sms_nextcode")]
+    public string? SmsNextCode { get; init; }
 
     /// <summary>
     /// Phone number of the device. Or, if the device has no associated number, the empty string ("").
     /// </summary>
-    public string PhoneNumber { get; }
-
-    /// <summary>
-    /// "phone" or "token".
-    /// </summary>
-    public DeviceType Type { get; }
-
-    internal Device(DeviceModel model)
-    {
-            CanAuto = model.Capabilities.Any(c => c == "auto");
-            CanPush = model.Capabilities.Any(c => c == "push");
-            CanSMS = model.Capabilities.Any(c => c == "sms");
-            CanPhone = model.Capabilities.Any(c => c == "phone");
-            CanMobileOTP = model.Capabilities.Any(c => c == "mobile_otp");
-            Capabilities = model.Capabilities.ToArray();
-            DeviceId = model.Device;
-            DisplayName = model.Display_Name;
-            Name = model.Name;
-            SMS_NextCode = model.Sms_Nextcode;
-            PhoneNumber = model.Number;
-            Type = model.Type?.ToLower() == "phone" ? DeviceType.Phone : DeviceType.Token;
-        }
+    [JsonPropertyName("number")]
+    public string? PhoneNumber { get; init; }
 }

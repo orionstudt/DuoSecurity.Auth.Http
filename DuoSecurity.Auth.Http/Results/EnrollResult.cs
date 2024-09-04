@@ -1,41 +1,49 @@
-﻿using DuoSecurity.Auth.Http.JsonModels;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace DuoSecurity.Auth.Http.Results;
 
-public class EnrollResult
+public sealed record EnrollResult
 {
     /// <summary>
     /// URL for an image of a scannable barcode with the activation code.
     /// </summary>
-    public string ActivationBarCode { get; }
+    [JsonPropertyName("activation_barcode")]
+    public required string ActivationBarCode { get; init; }
 
     /// <summary>
-    /// Code to enter into the Duo Mobile app to add the account. On phones with Duo Mobile already installed it will be a clickable link.
+    /// Code to enter into the Duo Mobile app to add the account.
+    /// On phones with Duo Mobile already installed it will be a clickable link.
     /// </summary>
-    public string ActivationCode { get; }
+    [JsonPropertyName("activation_code")]
+    public required string ActivationCode { get; init; }
+    
+    /// <summary>
+    /// Opening this URL on a phone with the Duo Mobile app installed will automatically complete activation.
+    /// </summary>
+    [JsonPropertyName("activation_url")]
+    public required string ActivationUrl { get; init; }
+
+    /// <summary>
+    /// Time at which this activation code will expire, as a UNIX timestamp.
+    /// </summary>
+    [JsonPropertyName("expiration")]
+    public required long Expiration { get; init; }
 
     /// <summary>
     /// Time at which this activation code will expire.
     /// </summary>
-    public DateTime ExpirationUtc { get; }
+    public DateTime ExpirationUtc => DateTime.UnixEpoch.AddSeconds(Expiration);
 
     /// <summary>
     /// Permanent, unique identifier for the user in Duo.
     /// </summary>
-    public string UserId { get; }
+    [JsonPropertyName("user_id")]
+    public required string UserId { get; init; }
 
     /// <summary>
     /// Unique name for the user in Duo.
     /// </summary>
-    public string UserName { get; }
-
-    internal EnrollResult(EnrollResultModel model)
-    {
-            ActivationBarCode = model.Activation_Barcode;
-            ActivationCode = model.Activation_Code;
-            ExpirationUtc = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(model.Expiration);
-            UserId = model.User_Id;
-            UserName = model.Username;
-        }
+    [JsonPropertyName("username")]
+    public required string UserName { get; init; }
 }

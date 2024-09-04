@@ -1,50 +1,53 @@
-﻿using DuoSecurity.Auth.Http.Core;
-using DuoSecurity.Auth.Http.JsonModels;
-using Newtonsoft.Json;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using DuoSecurity.Auth.Http.Internal;
+using DuoSecurity.Auth.Http.Results;
 
 namespace DuoSecurity.Auth.Http;
 
 internal static class DuoResponse
 {
-    public static async Task<DuoResponse<TResult>> ParseAsync<TJsonModel, TResult>(HttpResponseMessage response)
-        where TJsonModel : class, IJsonModel<TResult>
+    public static async Task<DuoResponse<TResult>> ParseAsync<TResult>(
+        HttpResponseMessage response,
+        CancellationToken cancel)
+        where TResult : class
     {
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync(cancel);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var model = JsonConvert.DeserializeObject<BaseModel<TJsonModel>>(content);
-                return new DuoResponse<TResult>
-                {
-                    IsSuccessful = true,
-                    Error = null,
-                    OriginalResponse = response,
-                    OriginalJson = content,
-                    Result = model.Response.ToResult()
-                };
-            }
-
+        if (!response.IsSuccessStatusCode)
             return Error<TResult>(response, content);
-        }
 
-    public static async Task<DuoResponse<TResult>> ErrorAsync<TResult>(HttpResponseMessage response)
+        var wrapper = JsonSerializer.Deserialize<ResponseWrapper<TResult>>(content);
+        return new DuoResponse<TResult>
+        {
+            IsSuccessful = true,
+            Error = null,
+            OriginalResponse = response,
+            OriginalJson = content,
+            Result = wrapper!.Response,
+        };
+    }
+
+    public static async Task<DuoResponse<TResult>> ErrorAsync<TResult>(
+        HttpResponseMessage response,
+        CancellationToken cancel)
     {
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return Error<TResult>(response, content);
-        }
+        var content = await response.Content.ReadAsStringAsync(cancel);
+        return Error<TResult>(response, content);
+    }
 
     public static DuoResponse<TResult> Error<TResult>(HttpResponseMessage response, string content)
     {
-            var error = JsonConvert.DeserializeObject<ErrorModel>(content);
-            return new DuoResponse<TResult>
-            {
-                IsSuccessful = false,
-                Error = new DuoError(error),
-                OriginalResponse = response,
-                OriginalJson = content,
-                Result = default(TResult),
-            };
-        }
+        return new DuoResponse<TResult>
+        {
+            IsSuccessful = false,
+            Error = JsonSerializer.Deserialize<DuoError>(content),
+            OriginalResponse = response,
+            OriginalJson = content,
+            Result = default,
+        };
+    }
 }

@@ -9,6 +9,7 @@ NuGet PM> Install-Package DuoSecurity.Auth.Http
 # Usage
 
 ### Client Setup
+
 ```C#
 using DuoSecurity.Auth.Http;
 
@@ -16,25 +17,39 @@ using DuoSecurity.Auth.Http;
 var config = new DuoAuthConfig("api-XXXXXXXX.duosecurity.com", "integrationKey", "secretKey");
 
 // Instantiate Client
-var client = new DuoAuthClient(config);
+using var client = new DuoAuthClient(config);
+
+// Make Requests..
 ```
+
+Note that the client constructor has an overload that takes an `HttpClient` so that you may
+use [HTTP client injection](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) when configuring your dependency pool.
 
 ---
 
 ### All Endpoints Are Supported
 
-| Endpoint |  Method |
-|----------|---------|
-| /ping | PingAsync |
-| /check | CheckAsync |
-| /logo | LogoAsync |
-| /enroll | EnrollAsync |
-| /enroll_status | EnrollStatusAsync |
-| /preauth | PreAuthBy{**UserKey**}Async |
-| /auth | Auth{**Factor**}By{**UserKey**}Async |
-| /auth (async) | Auth{**Factor**}By{**UserKey**}ForPollingAsync |
-| /auth_status | AuthStatusAsync |
+| Endpoint | Method               |
+|----------|----------------------|
+| /ping | PingAsync            |
+| /check | CheckAsync           |
+| /logo | LogoAsync            |
+| /enroll | EnrollAsync          |
+| /enroll_status | EnrollStatusAsync    |
+| /preauth | PreAuthAsync         |
+| /auth | AuthAsync            |
+| /auth (async) | AuthWithPollingAsync |
+| /auth_status | AuthStatusAsync      |
 
-**{UserKey}** can be substituted for *UserId* or *Username.*
+### All Factors Are Supported
 
-**{Factor}** can be substituted for one of the following: *Auto*, *Push*, *Passcode* , *Phone*, or *SMS.*
+Factors are supported via derivations of the `AuthRequest` object.
+
+The object(s) can be derived from to support new factors or customize parameters sent to the API.
+
+The objects are:
+- `AutoAuthRequest`
+- `PushAuthRequest`
+- `PasscodeAuthRequest`
+- `PhoneAuthRequest`
+- `SmsAuthRequest`
